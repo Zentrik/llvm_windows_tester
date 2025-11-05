@@ -30,6 +30,7 @@ jobs:
         BINARYBUILDER_CCACHE_DIR: ${{ github.workspace }}/binarybuilder_ccache
         LLVM_VERSION: ${{ inputs.LLVM_VERSION }}
         LLVM_VERSION_MAJOR: ${{ inputs.LLVM_VERSION_MAJOR }}
+        JULIA_REGISTRYCI_AUTOMERGE: true
     steps:
       - uses: actions/checkout@v4
       - name: Maximize build disk space (Only remove unwanted software)
@@ -55,7 +56,7 @@ jobs:
           verbose: false
       - uses: julia-actions/setup-julia@v2
         with:
-          version: '1.7'
+          version: '~1.12.0-0'
           arch: x64
       - name: Cache BinaryBuilder Storage Directory
         if: inputs.save_cache
@@ -97,7 +98,6 @@ jobs:
           fi
 
           cd L/LLVM/LLVM_full@20
-          rm -rf bundled/libcxx_patches
           if [ "$(ls -A $GITHUB_WORKSPACE/llvm-patches)" ]; then
               cp $GITHUB_WORKSPACE/llvm-patches/* bundled/patches/
           fi
